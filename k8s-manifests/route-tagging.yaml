@@ -1,0 +1,15 @@
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: tagging-route
+  namespace: ssgtm
+spec:
+  parentRefs:
+  - kind: Gateway
+    name: external-http
+  hostnames:
+  - "ssgtm.mgalite.demo.altostrat.com"
+  rules:
+  - backendRefs:
+    - name: tagging-service
+      port: 3002

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: preview-deployment
+  namespace: ssgtm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: preview
+  template:
+    metadata:
+      labels:
+        app: preview
+    spec:
+      containers:
+      - name: preview
+        image: gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: CONTAINER_CONFIG
+          value: "<YOUR_OWN_VALUE>"
+        - name: RUN_AS_PREVIEW_SERVER
+          value: "true"
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /healthz

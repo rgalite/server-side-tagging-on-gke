@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tagging-deployment
+  namespace: ssgtm
+spec:
+  selector:
+    matchLabels:
+      app: tagging
+  template:
+    metadata:
+      labels:
+        app: tagging
+    spec:
+      containers:
+      - name: tagging
+        image: gcr.io/cloud-tagging-10302018/gtm-cloud-image:stable
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: CONTAINER_CONFIG
+          value: "aWQ9R1RNLVRMNTJDTFYmZW52PTEmYXV0aD1Gai1kaDRReTZxc1NtRUd1bG5lbzZ3"
+        - name: PREVIEW_SERVER_URL
+          value: "https://ssgtm-preview.mgalite.demo.altostrat.com"
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /healthz
